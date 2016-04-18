@@ -1,0 +1,14 @@
+button.small_button{
+    background-color: #4CAF50;
+    border: 1px solid green;
+    color: white;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+button.small_button:hover {
+    background-color: #3e8e41;
+}

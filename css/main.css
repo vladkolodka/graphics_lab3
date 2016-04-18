@@ -1,0 +1,64 @@
+h1{
+    color: #aeaeae;
+    text-align: center;
+    margin: 10px auto;
+    text-shadow: 1px 5px 5px silver;
+}
+main{
+    min-width: 1020px;
+    position: relative;
+}
+/* ---------------------------------- */
+.viewports{
+    background-color: #dedede;
+    width: 72.261235955056179775280898876404%;
+}
+.viewports table{
+    width: 100%;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+.viewports table tr{
+
+}
+.viewports table tr td{
+    padding: 0;
+}
+/* ---------------------------------- */
+.viewport{
+    padding: 5px;
+    height: 300px;
+
+    position: relative;
+}
+.viewport span{
+    font-family: "Courier New", Courier, monospace;
+    position: absolute;
+    left: 10px;
+    top: 8px;
+}
+.viewport canvas {
+    /*background-color: white;*/
+    border: 1px solid black;
+    background: url("../resource/img/paper.jpg");
+    width: 100%;
+    height: 100%;
+}
+/* ---------------------------------- */
+.toolbar{
+    border: 1px solid black;
+
+    position: absolute;
+    box-sizing: border-box;
+    background-color: #dedede;
+
+    width: 27.036516853932584269662921348315%;
+    height: 100%;
+
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+.toolbar div{
+
+}
