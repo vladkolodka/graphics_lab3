@@ -1,8 +1,14 @@
+body{
+    background-color: #dedede;
+    margin: 0;
+    padding: 0;
+}
 h1{
-    color: #aeaeae;
+    color: #000000;
     text-align: center;
-    margin: 10px auto;
-    text-shadow: 1px 5px 5px silver;
+    margin: 0 auto;
+    padding: 10px 0;
+    text-shadow: 1px 5px 5px #859e66;
 }
 main{
     min-width: 1020px;
@@ -40,7 +46,7 @@ main{
 .viewport canvas {
     /*background-color: white;*/
     border: 1px solid black;
-    background: url("../resource/img/paper.jpg");
+    background: url("../resources/img/paper.jpg");
     width: 100%;
     height: 100%;
 }
@@ -60,5 +66,9 @@ main{
     bottom: 0;
 }
 .toolbar div{
-
+    padding-top: 5px;
+}
+.toolbar table{
+    margin: 0 auto;
+    background-color: ivory;
 }

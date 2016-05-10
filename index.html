@@ -5,23 +5,35 @@
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="stylesheet" type="text/css" href="css/controls.css">
     <title>Graphics 3</title>
+
+    <script src="js/Shapes/Shape.js"></script>
+    <script src="js/Shapes/Axis.js"></script>
+
+    <script src="js/Shapes/Cube.js"></script>
+    <script src="js/Shapes/Cylinder.js"></script>
+    <script src="js/Shapes/Pyramid.js"></script>
+
+    <script src="js/Converter.js"></script>
+    <script src="js/FlatFigureCreator.js"></script>
+
+    <script src="js/Controller.js"></script>
 </head>
 <body>
 
-<h1>Graphics 3</h1>
+<h1>AUTODESK over9999DS Max 2020</h1>
 <main>
     <section class="viewports">
         <table>
             <tr>
                 <td>
                     <div class="viewport">
-                        <span>Viewport</span>
+                        <span>Top</span>
                         <canvas id="viewport-1"></canvas>
                     </div>
                 </td>
                 <td>
                     <div class="viewport">
-                        <span>Viewport</span>
+                        <span>Left</span>
                         <canvas id="viewport-2"></canvas>
                     </div>
                 </td>
@@ -29,13 +41,13 @@
             <tr>
                 <td>
                     <div class="viewport">
-                        <span>Viewport</span>
+                        <span>Front</span>
                         <canvas id="viewport-3"></canvas>
                     </div>
                 </td>
                 <td>
                     <div class="viewport">
-                        <span>Viewport</span>
+                        <span>Isometric</span>
                         <canvas id="viewport-4"></canvas>
                     </div>
                 </td>
@@ -44,16 +56,61 @@
     </section>
 
     <section class="toolbar">
-        <div>
-            <!-- Rotate dial -->
-        </div>
-        <div>
-            <!-- Move buttons -->
-        </div>
-        <div>
-            <!-- Scale buttons -->
+        <div id="toolbar-buttons">
+            <div>
+                <table>
+                    <tr>
+                        <td><button class="small_button" data-action="nfc">Cube</button></td>
+                        <td><button class="small_button" data-action="nfp">Pyramid</button></td>
+                        <td><button class="small_button" data-action="nfr">Cylinder</button></td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <table>
+                    <tr>
+                        <td><button class="small_button" data-action="rxp">RotateX +</button></td>
+                        <td><button class="small_button" data-action="ryp">RotateY +</button></td>
+                        <td><button class="small_button" data-action="rzp">RotateZ +</button></td>
+                    </tr>
+                    <tr>
+                        <td><button class="small_button" data-action="rxm">RotateX -</button></td>
+                        <td><button class="small_button" data-action="rym">RotateY -</button></td>
+                        <td><button class="small_button" data-action="rzm">RotateZ -</button></td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <table>
+                    <tr>
+                        <td><button class="small_button" data-action="sp">Scale +</button></td>
+                        <td><button class="small_button" data-action="sm">Scale -</button></td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <table>
+                    <tr>
+                        <td><button class="small_button" data-action="mxp">MoveX +</button></td>
+                        <td><button class="small_button" data-action="myp">MoveY +</button></td>
+                        <td><button class="small_button" data-action="mzp">MoveZ +</button></td>
+                    </tr>
+                    <tr>
+                        <td><button class="small_button" data-action="mxm">MoveX -</button></td>
+                        <td><button class="small_button" data-action="mym">MoveY -</button></td>
+                        <td><button class="small_button" data-action="mzm">MoveZ -</button></td>
+                    </tr>
+                </table>
+                <hr />
+            </div>
         </div>
     </section>
 </main>
+<script>
+    var controller;
+    window.addEventListener("DOMContentLoaded", function(){
+        controller = new Controller("viewport-1", "viewport-2", "viewport-3", "viewport-4");
+    }, false);
+</script>
 </body>
 </html>
