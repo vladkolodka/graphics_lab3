@@ -72,3 +72,7 @@ main{
     margin: 0 auto;
     background-color: ivory;
 }
+#toolbar-buttons div{
+    padding-bottom: 5px;
+    border-bottom: 1px solid black;
+}

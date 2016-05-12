@@ -24,7 +24,7 @@ var FlatFigureCreator = {
      */
     circle: function (x, y, radius) {
         var cords = [], xT = x, yT = y;
-        var step = Math.PI / 180;
+        var step = Math.PI / 180 * 10;
 
         for (var i = 0; i < Math.PI * 2; i += step){
             xT = x + radius * Math.sin(i);

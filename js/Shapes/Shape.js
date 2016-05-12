@@ -1,6 +1,14 @@
 function Shape() {
     this.cords = [];
     this.connections = [];
+
+    this.x = 0;
+    this.y = 0;
+    this.z = 0;
+
+    this.halfX = 0;
+    this.halfY = 0;
+    this.halfZ = 0;
 }
 
 /**
@@ -8,7 +16,11 @@ function Shape() {
  * @return {Array}
  */
 Shape.prototype.getMiddleCords = function () {
-    return [0, 0, 0];
+    return [
+        this.x + this.halfX,
+        this.y + this.halfY,
+        this.z + this.halfZ
+    ];
 };
 /**
  * Перемещение фигуры
@@ -18,6 +30,10 @@ Shape.prototype.getMiddleCords = function () {
  * @return {void}
  */
 Shape.prototype.move = function (x, y, z) {
+    this.x += x;
+    this.y += y;
+    this.z += z;
+
     for (var i = 0; i < this.cords.length; i++) {
         this.cords[i][0] += x;
         this.cords[i][1] += y;
@@ -77,53 +93,44 @@ Shape.prototype.rotate = function (deg, type) {
             break;
     }
     var middleCords = this.getMiddleCords();
+    console.log("X: " + this.x + ",Y: " + this.y + ",Z: " + this.z);
     console.log(middleCords);
     var temp = [];
 
     this.move(-middleCords[0], -middleCords[1], -middleCords[2]);
-    // this.move(-15, -50, -15);
     for (var i = 0; i < this.cords.length; i++) {
         temp = Converter.multiply([
             [this.cords[i][0], this.cords[i][1], this.cords[i][2], 1]
         ], matrix);
+
         this.cords[i][0] = temp[0][0];
         this.cords[i][1] = temp[0][1];
         this.cords[i][2] = temp[0][2];
     }
     this.move(middleCords[0], middleCords[1], middleCords[2]);
-    // this.move(15, 50, 15);
-
 };
 /**
  * Визуализация фигуры
  * @param mode {number} Режим проекции
  * @param canvas {object} Объект для рисования
+ * @param color Цвет фигуры
  * @return {void}
  */
 Shape.prototype.render = function (mode, canvas, color) {
     var newCords = [];
-    var offset = 50;
+    var offset = 100;
     switch (mode) {
         case 1:
             newCords = Converter.toTopView(this.cords);
             break;
         case 2:
             newCords = Converter.toSideView(this.cords);
-            offset = 120;
             break;
         case 3:
             newCords = Converter.toFrontView(this.cords);
-            offset = 120;
             break;
         case 4:
-            var middleCords = this.getMiddleCords();
-            console.log(this.cords);
-            // TODO Исправить нахождение средней точки фигуры
-            // this.move(-middleCords[0], -middleCords[1], -middleCords[2]);
             newCords = Converter.toIsometricView(this.cords);
-            // this.move(middleCords[0], middleCords[1], middleCords[2]);
-            offset = 100;
-            console.log(newCords);
             break;
     }
 

@@ -21,7 +21,7 @@ function Controller(elementNames) {
 
 Controller.prototype.start = function () {
 
-    this.shape = new Cube([0, 0], [20, 20], 60);
+    this.shape = new Cube([0, 0], [50, 50], 50);
     // this.shape = new Cylinder(50, 50, 30, 100);
     this.render();
 };
@@ -37,6 +37,9 @@ Controller.prototype.setViewportsSize = function (height) {
 Controller.prototype.render = function () {
     for (var i = 0; i < this.elements.length; i++) this.clearCanvas(this.elements[i], this.viewports[i]);
 
+    this.axis.render(1, this.viewports[0], "red");
+    this.axis.render(2, this.viewports[1], "red");
+    this.axis.render(3, this.viewports[2], "red");
     this.axis.render(4, this.viewports[3], "red");
 
     this.shape.render(1, this.viewports[0]);
@@ -88,7 +91,7 @@ Controller.prototype.buttonsClick = function(event){
             self.shape = new Pyramid([0, 0], [50, 50], 100);
             break;
         case 'nfr':
-            self.shape = new Cylinder(50, 50, 30, 100);
+            self.shape = new Cylinder(30, 30, 30, 100);
             break;
         case 'rxp':
             self.shape.rotate(2, "x");

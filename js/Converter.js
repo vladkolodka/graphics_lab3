@@ -1,26 +1,26 @@
 var Converter = {
-    /*isometricMatrix: [
-        [0.707, -0.408, 0, 0],
-        [0, 0.816, 0, 0],
-        [-0.707, -0.408, 0, 0],
-        [0, 0, 0, 1]
-    ],*/
-    isometricMatrix: [
-     [0.707, -0.408, 0],
-     [0, 0.816, 0],
-     [-0.707, -0.408, 0]
+    IsometricMatrix: [
+        [0.707, -0.408, 0],
+        [0, 0.816, 0],
+        [-0.707, -0.408, 0]
     ],
-    toTopView: function(cords){
+    HermiteMatrix: [
+        [2, -2, 1, -1],
+        [-3, 3, -2, -1],
+        [0, 0, 1, 0],
+        [0, 0, 0, 0]
+    ],
+    toTopView: function (cords) {
         var newCords = [];
-        for (var i = 0; i < cords.length; i++) newCords.push([cords[i][0], cords[i][2]]);
+        for (var i = 0; i < cords.length; i++) newCords.push([cords[i][0], cords[i][2] * -1]);
         return newCords;
     },
-    toSideView: function(cords){
+    toSideView: function (cords) {
         var newCords = [];
         for (var i = 0; i < cords.length; i++) newCords.push([cords[i][2], cords[i][1] * -1]);
         return newCords;
     },
-    toFrontView: function(cords){
+    toFrontView: function (cords) {
         var newCords = [];
         for (var i = 0; i < cords.length; i++) newCords.push([cords[i][0], cords[i][1] * -1]);
         return newCords;
@@ -34,10 +34,10 @@ var Converter = {
         var newCords = [];
         var temp;
 
-        for (var i = 0; i < cords.length; i++){
+        for (var i = 0; i < cords.length; i++) {
             temp = this.multiply([
                 [cords[i][0], cords[i][1], cords[i][2]]
-            ], this.isometricMatrix);
+            ], this.IsometricMatrix);
             newCords.push([temp[0][0] * -1, temp[0][1] * -1]);
         }
 
@@ -45,9 +45,9 @@ var Converter = {
     },
     /**
      * Производит умножение матриц
-     * @param A {Array} Матрица A
-     * @param B {Array} Матрица B
-     * @return {Array} Результирующая матрица
+     * @param A {Array<Array<number>>} Матрица A
+     * @param B {Array<Array<number>>} Матрица B
+     * @return {Array<Array<number>>} Результирующая матрица
      */
     multiply: function (A, B) {
         var rowsA = A.length, colsA = A[0].length,
@@ -67,5 +67,25 @@ var Converter = {
         }
 
         return C;
+    },
+    /**
+     * Транспонировать матрицу
+     * @param Matrix {Array<Array<number>>}
+     * @return {Array<Array<number>>} транспонированная матрица
+     */
+    transpose: function (Matrix) {
+        return Matrix[0].map(function(col, i) {
+            return Matrix.map(function(row) {
+                return row[i]
+            });
+        });
+    },
+    /**
+     * Создает матрицу T/S
+     * @param value Здачение
+     * @return {Array<Array<number>>}
+     */
+    SingleLineMatrix: function (value) {
+        return [[Math.pow(value, 3), Math.pow(value, 2), value, 1]];
     }
 };

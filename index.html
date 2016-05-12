@@ -6,15 +6,16 @@
     <link rel="stylesheet" type="text/css" href="css/controls.css">
     <title>Graphics 3</title>
 
+    <script src="js/Converter.js"></script>
+    <script src="js/FlatFigureCreator.js"></script>
+
     <script src="js/Shapes/Shape.js"></script>
     <script src="js/Shapes/Axis.js"></script>
 
     <script src="js/Shapes/Cube.js"></script>
     <script src="js/Shapes/Cylinder.js"></script>
     <script src="js/Shapes/Pyramid.js"></script>
-
-    <script src="js/Converter.js"></script>
-    <script src="js/FlatFigureCreator.js"></script>
+    <script src="js/Shapes/HermiteSurface.js"></script>
 
     <script src="js/Controller.js"></script>
 </head>
@@ -63,6 +64,7 @@
                         <td><button class="small_button" data-action="nfc">Cube</button></td>
                         <td><button class="small_button" data-action="nfp">Pyramid</button></td>
                         <td><button class="small_button" data-action="nfr">Cylinder</button></td>
+                        <td><button class="small_button" data-action="nfs">Surface</button></td>
                     </tr>
                 </table>
             </div>
@@ -101,7 +103,6 @@
                         <td><button class="small_button" data-action="mzm">MoveZ -</button></td>
                     </tr>
                 </table>
-                <hr />
             </div>
         </div>
     </section>
