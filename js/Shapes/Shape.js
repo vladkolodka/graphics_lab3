@@ -93,8 +93,6 @@ Shape.prototype.rotate = function (deg, type) {
             break;
     }
     var middleCords = this.getMiddleCords();
-    console.log("X: " + this.x + ",Y: " + this.y + ",Z: " + this.z);
-    console.log(middleCords);
     var temp = [];
 
     this.move(-middleCords[0], -middleCords[1], -middleCords[2]);

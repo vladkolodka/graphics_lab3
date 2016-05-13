@@ -93,6 +93,9 @@ Controller.prototype.buttonsClick = function(event){
         case 'nfr':
             self.shape = new Cylinder(30, 30, 30, 100);
             break;
+        case 'nfs':
+            self.shape = new HermiteSurface([], [], [], 10);
+            break;
         case 'rxp':
             self.shape.rotate(2, "x");
             break;
