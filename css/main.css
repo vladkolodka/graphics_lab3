@@ -1,48 +1,57 @@
-body{
+body {
     background-color: #dedede;
     margin: 0;
     padding: 0;
 }
-h1{
+
+h1 {
     color: #000000;
     text-align: center;
     margin: 0 auto;
     padding: 10px 0;
     text-shadow: 1px 5px 5px #859e66;
 }
-main{
+
+main {
     min-width: 1020px;
     position: relative;
 }
+
 /* ---------------------------------- */
-.viewports{
+.viewports {
     background-color: #dedede;
     width: 72.261235955056179775280898876404%;
 }
-.viewports table{
+
+.viewports table {
     width: 100%;
     border: 1px solid black;
     border-collapse: collapse;
 }
-.viewports table tr{
+
+.viewports table tr {
 
 }
-.viewports table tr td{
+
+.viewports table tr td {
     padding: 0;
 }
+
 /* ---------------------------------- */
-.viewport{
+.viewport {
     padding: 5px;
     height: 300px;
 
     position: relative;
 }
-.viewport span{
+
+.viewport span {
     font-family: "Courier New", Courier, monospace;
     position: absolute;
     left: 10px;
     top: 8px;
 }
+
 .viewport canvas {
     /*background-color: white;*/
     border: 1px solid black;
@@ -50,8 +59,9 @@ main{
     width: 100%;
     height: 100%;
 }
+
 /* ---------------------------------- */
-.toolbar{
+.toolbar {
     border: 1px solid black;
 
     position: absolute;
@@ -65,30 +75,42 @@ main{
     right: 0;
     bottom: 0;
 }
-.toolbar div{
+
+.toolbar div {
     padding-top: 5px;
 }
-.toolbar table{
+
+.toolbar table {
     margin: 0 auto;
     background-color: ivory;
 }
-#toolbar-buttons div{
+
+#toolbar-buttons div {
     padding-bottom: 5px;
     border-bottom: 1px solid black;
 }
-#surface_panel>table{
-    padding-top: 5px;
+
+#surface_panel {
+    border-top: 1px solid black;
+    margin-top: 30px;
 }
-#surface_panel input[type=text]{
+
+#surface_panel > table {
+    padding-top: 2px;
+}
+
+#surface_panel input[type=text] {
     width: 100%;
     box-sizing: border-box;
     padding-right: 20px;
 }
-.panel-header{
+
+.panel-header {
     text-align: center;
     font-weight: bolder;
     font-size: 1.5em;
 }
-.hidden-panel{
+
+.hidden-panel {
     display: none;
 }

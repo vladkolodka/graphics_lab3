@@ -23,15 +23,14 @@ function HermiteSurface(Cx, Cy, Cz, stepsCount) {
     // find coordinates
     for (var i = step; i <= 1; i += step) {
         for (var j = step; j <= 1; j += step) {
-            var S = Converter.SingleLineMatrix(j);
-            var T = Converter.transpose(Converter.SingleLineMatrix(i));
+            var S = Converter.SingleLineMatrix(i);
+            var T = Converter.transpose(Converter.SingleLineMatrix(j));
 
-            this.cords.push([this.getCord(Cx, S, T), this.getCord(Cy, S, T), this.getCord(Cz, S, T)]);
+            this.cords.push([this.getCord(Cx, S, T) , this.getCord(Cy, S, T), this.getCord(Cz, S, T)]);
 
             // this.cords.push([j * stepsCount * 10, (j / i) * stepsCount, i * stepsCount * 10]);
         }
     }
-
     // create connections
     for (i = 0; i < this.cords.length; i += stepsCount) {
         for (j = i; j < i + stepsCount; j++) {
@@ -44,5 +43,11 @@ function HermiteSurface(Cx, Cy, Cz, stepsCount) {
 HermiteSurface.prototype = Object.create(Shape.prototype);
 
 HermiteSurface.prototype.getCord = function (Cn, S, T) {
+    /*var a = Converter.multiply(S, Converter.HermiteMatrix);
+    var b = Converter.multiply(a, Cn);
+    var c = Converter.multiply(b, Converter.transpose(Converter.HermiteMatrix));
+    var d = Converter.multiply(c, T);
+
+    return d[0][0];*/
     return Converter.multiply(Converter.multiply(Converter.multiply(Converter.multiply(S, Converter.HermiteMatrix), Cn), Converter.transpose(Converter.HermiteMatrix)), T)[0][0];
 };

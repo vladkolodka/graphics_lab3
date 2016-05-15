@@ -8,15 +8,20 @@ function Controller(elementNames) {
     this.viewports = [];
     this.shape = null;
     this.axis = new Axis(0, 0, 0, 500);
+    this.surface = {
+        Cx: [],
+        Cy: [],
+        Cz: [],
+        fields: document.getElementById('surface-input-fields').getElementsByTagName('input'),
+        panel: document.getElementById('surface_panel')
+    };
 
     for (var i = 0; i < arguments.length; i++) this.elements.push(document.getElementById(arguments[i]));
     for (i = 0; i < this.elements.length; i++) this.viewports.push(this.elements[i].getContext("2d"));
 
     this.setViewportsSize(190);
-    this.start();
 
-    window.addEventListener("keydown", this.keyPressed, false);
-    document.getElementById("toolbar-buttons").addEventListener("click", this.buttonsClick, false);
+    document.getElementsByClassName("toolbar")[0].addEventListener("click", this.buttonsClick, false);
 
     var rotationDialsNodes = [].slice.call(document.getElementsByClassName('rotations')[0].getElementsByClassName('dial'));
     this.rotationDials = [];
@@ -29,13 +34,67 @@ function Controller(elementNames) {
         dialObject.on('mousemove', self.rotate);
         self.rotationDials.push(dialObject);
     });
-    console.log(this.rotationDials);
-}
 
-Controller.prototype.start = function () {
+    this.surface.radios = document.getElementsByName('axe');
+    [].slice.call(this.surface.radios).forEach(function (radio) {
+        radio.addEventListener('change', self.surfaceRadioChanged, false);
+    });
+
+    [].slice.call(this.surface.fields).forEach(function (field) {
+        field.addEventListener('change', self.surfaceFieldChanged, false);
+    });
 
     this.shape = new Cube([0, 0], [50, 50], 50);
     this.render();
+}
+
+Controller.prototype.surfaceFieldChanged = function (event) {
+    var index = Array.prototype.indexOf.call(controller.surface.fields, event.target);
+
+    var C;
+    var axeName;
+    for (var i = 0; i < controller.surface.radios.length; i++) {
+        if(controller.surface.radios[i].checked) {
+            axeName = controller.surface.radios[i].value;
+            break;
+        }
+    }
+    switch (axeName){
+        case 'x':
+            C = controller.surface.Cx;
+            break;
+        case 'y':
+            C = controller.surface.Cy;
+            break;
+        case 'z':
+            C = controller.surface.Cz;
+            break;
+    }
+
+    var tempI = parseInt(index / 4);
+    C[tempI][index - tempI * 4] = Number(event.target.value);
+};
+
+Controller.prototype.fillSurfaceFields = function (C) {
+    for (var i = 0; i < this.surface.fields.length; i++) {
+        var tempI = parseInt(i / 4);
+        this.surface.fields[i].value = C[tempI][i - tempI * 4];
+    }
+};
+Controller.prototype.surfaceRadioChanged = function (event) {
+    var axeName = event.target.value;
+
+    switch (axeName) {
+        case 'x':
+            controller.fillSurfaceFields(controller.surface.Cx);
+            break;
+        case 'y':
+            controller.fillSurfaceFields(controller.surface.Cy);
+            break;
+        case 'z':
+            controller.fillSurfaceFields(controller.surface.Cz);
+            break;
+    }
 };
 /**
  * Изменяет размер всех контролируеых canvas.
@@ -62,55 +121,61 @@ Controller.prototype.render = function () {
 Controller.prototype.clearCanvas = function (object, canvas) {
     canvas.clearRect(0, 0, object.width, object.height);
 };
-Controller.prototype.keyPressed = function (event) {
-    switch (event.keyCode) {
-        case 37:
-            // left arrow
 
-            controller.shape.rotate(2, "x");
-            controller.render();
-            event.preventDefault();
-            break;
-        case 38:
-            controller.shape.rotate(2, "y");
-            controller.render();
-            event.preventDefault();
-            break;
-        case 39:
-            controller.shape.rotate(2, "z");
-            controller.render();
-            event.preventDefault();
-            break;
-        case 40:
-            controller.shape.scale(0.9);
-            controller.render();
-            event.preventDefault();
-            break;
-    }
-};
 Controller.prototype.resetRotationDials = function () {
-    for(var i = 0; i < controller.rotationDials.length; i++) controller.rotationDials[i].angle(0);
+    for (var i = 0; i < controller.rotationDials.length; i++) controller.rotationDials[i].angle(0);
 };
 Controller.prototype.buttonsClick = function (event) {
     if (event.target.nodeName != "BUTTON") return;
 
     var action = event.target.getAttribute("data-action");
+    if(action.indexOf('nf') == 0) {
+        controller.surface.panel.classList.add('hidden-panel');
+        controller.resetRotationDials();
+    }
     switch (action) {
         case 'nfc':
             controller.shape = new Cube([0, 0], [50, 50], 50);
-            controller.resetRotationDials();
             break;
         case 'nfp':
             controller.shape = new Pyramid([0, 0], [50, 50], 100);
-            controller.resetRotationDials();
             break;
         case 'nfr':
             controller.shape = new Cylinder(30, 30, 30, 100);
-            controller.resetRotationDials();
             break;
         case 'nfs':
-            controller.shape = new HermiteSurface([], [], [], 10);
-            controller.resetRotationDials();
+            /*
+            [  P00,       P01,       dP00/dt,      dP01/dt     ],
+            [  P10,       P11,       dP10/dt,      dP11/dt     ],
+            [  dP00/ds,   dP01/ds,   d2P00/dsdt,   d2P01/dsdt  ],
+            [  dP10/ds,   dP11/ds,   d2P10/dsdt,   d2P11/dsdt  ]
+             */
+            controller.surface.Cx = [
+                [1, 1, 1, 1],
+                [200, 200, 1, 1],
+                [50, 50, 1, 1],
+                [50, 50, 1, 1]
+            ];
+            controller.surface.Cy = [
+                [1, 1, 1, 1],
+                [1, 1, 1, 1],
+                [1, 1, 50, 1],
+                [1, 1, 1, 1]
+            ];
+            controller.surface.Cz = [
+                [1, 200, 0, 50],
+                [1, 200, 0, 50],
+                [1, 1, 1, 1],
+                [1, 1, 1, 1]
+            ];
+
+            for (var i = 0; i < controller.surface.radios.length; i++) controller.surface.radios[i].checked = false;
+            controller.surface.radios[0].checked = true;
+
+            controller.fillSurfaceFields(controller.surface.Cx);
+
+            controller.shape = new HermiteSurface(controller.surface.Cx, controller.surface.Cy, controller.surface.Cz, 10);
+            controller.surface.panel.classList.remove('hidden-panel');
             break;
         case 'sp':
             controller.shape.scale(1.1);
@@ -135,6 +200,9 @@ Controller.prototype.buttonsClick = function (event) {
             break;
         case 'mzm':
             controller.shape.move(0, 0, -2);
+            break;
+        case 'updateSurface':
+            controller.shape = new HermiteSurface(controller.surface.Cx, controller.surface.Cy, controller.surface.Cz, 10);
             break;
     }
     controller.render();

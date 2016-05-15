@@ -105,10 +105,11 @@
                         <td>
                             <table>
                                 <tr>
-                                    <td><span>Scale</span></td>
                                     <td>
                                         <button class="small_button" data-action="sp">+</button>
                                     </td>
+                                </tr>
+                                <tr>
                                     <td>
                                         <button class="small_button" data-action="sm">-</button>
                                     </td>
@@ -146,25 +147,28 @@
 
             </div>
         </div>
-        <div id="surface_panel">
+        <div id="surface_panel" class="hidden-panel">
             <table>
                 <tr>
-                    <td class="panel-header">Surface</td>
+                    <td class="panel-header">Surface parameters</td>
+                    <td class="panel-header">
+                        <button class="small_button" data-action="updateSurface">Update</button>
+                    </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td colspan="2">
                         <table>
-                            <tr>
-                                <td><label><span>X</span><input type="radio" checked></label></td>
-                                <td><label><span>Y</span><input type="radio"></label></td>
-                                <td><label><span>Z</span><input type="radio"></label></td>
+                            <tr id="surface-radio-axes">
+                                <td><label><span>X</span><input type="radio" name="axe" checked value="x"></label></td>
+                                <td><label><span>Y</span><input type="radio" name="axe" value="y"></label></td>
+                                <td><label><span>Z</span><input type="radio" name="axe" value="z"></label></td>
                             </tr>
                         </table>
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        <table>
+                    <td colspan="2">
+                        <table id="surface-input-fields">
                             <tr>
                                 <td><span>P00</span><label><input type="text"></label></td>
                                 <td><span>P01</span><label><input type="text"></label></td>
