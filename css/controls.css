@@ -13,3 +13,26 @@ button.small_button{
 button.small_button:hover {
     background-color: #3e8e41;
 }
+.rotations .dial {
+    background-color: #4CAF50;
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+
+    border: none !important;
+    padding: 0;
+}
+
+.rotations .dial #null_knob {
+    background-color: green;
+    border-radius: 100px;
+    border: none !important;
+    padding: 0;
+}
+.rotations .dial #null_wheel {
+    border: none !important;
+    padding: 0;
+}
+.rotations .dial #null_knob:hover{
+    background-color: #3e8e41;
+}

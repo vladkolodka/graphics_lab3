@@ -17,12 +17,24 @@ function Controller(elementNames) {
 
     window.addEventListener("keydown", this.keyPressed, false);
     document.getElementById("toolbar-buttons").addEventListener("click", this.buttonsClick, false);
+
+    var rotationDialsNodes = [].slice.call(document.getElementsByClassName('rotations')[0].getElementsByClassName('dial'));
+    this.rotationDials = [];
+    var self = this;
+    rotationDialsNodes.forEach(function (dial) {
+        var dialObject = JogDial(dial, {
+            minDegree: 0,
+            maxDegree: 360
+        });
+        dialObject.on('mousemove', self.rotate);
+        self.rotationDials.push(dialObject);
+    });
+    console.log(this.rotationDials);
 }
 
 Controller.prototype.start = function () {
 
     this.shape = new Cube([0, 0], [50, 50], 50);
-    // this.shape = new Cylinder(50, 50, 30, 100);
     this.render();
 };
 /**
@@ -51,93 +63,88 @@ Controller.prototype.clearCanvas = function (object, canvas) {
     canvas.clearRect(0, 0, object.width, object.height);
 };
 Controller.prototype.keyPressed = function (event) {
-    var self = controller;
     switch (event.keyCode) {
         case 37:
             // left arrow
 
-            self.shape.rotate(2, "x");
-            self.render();
+            controller.shape.rotate(2, "x");
+            controller.render();
             event.preventDefault();
             break;
         case 38:
-            self.shape.rotate(2, "y");
-            self.render();
+            controller.shape.rotate(2, "y");
+            controller.render();
             event.preventDefault();
             break;
         case 39:
-            self.shape.rotate(2, "z");
-            self.render();
+            controller.shape.rotate(2, "z");
+            controller.render();
             event.preventDefault();
             break;
         case 40:
-            self.shape.scale(0.9);
-            self.render();
+            controller.shape.scale(0.9);
+            controller.render();
             event.preventDefault();
             break;
     }
 };
-Controller.prototype.buttonsClick = function(event){
-    if(event.target.nodeName != "BUTTON") return;
+Controller.prototype.resetRotationDials = function () {
+    for(var i = 0; i < controller.rotationDials.length; i++) controller.rotationDials[i].angle(0);
+};
+Controller.prototype.buttonsClick = function (event) {
+    if (event.target.nodeName != "BUTTON") return;
 
     var action = event.target.getAttribute("data-action");
-
-    var self = controller;
-    switch (action){
+    switch (action) {
         case 'nfc':
-            self.shape = new Cube([0, 0], [50, 50], 60);
+            controller.shape = new Cube([0, 0], [50, 50], 50);
+            controller.resetRotationDials();
             break;
         case 'nfp':
-            self.shape = new Pyramid([0, 0], [50, 50], 100);
+            controller.shape = new Pyramid([0, 0], [50, 50], 100);
+            controller.resetRotationDials();
             break;
         case 'nfr':
-            self.shape = new Cylinder(30, 30, 30, 100);
+            controller.shape = new Cylinder(30, 30, 30, 100);
+            controller.resetRotationDials();
             break;
         case 'nfs':
-            self.shape = new HermiteSurface([], [], [], 10);
-            break;
-        case 'rxp':
-            self.shape.rotate(2, "x");
-            break;
-        case 'ryp':
-            self.shape.rotate(2, "y");
-            break;
-        case 'rzp':
-            self.shape.rotate(2, "z");
-            break;
-        case 'rxm':
-            self.shape.rotate(-2, "x");
-            break;
-        case 'rym':
-            self.shape.rotate(-2, "y");
-            break;
-        case 'rzm':
-            self.shape.rotate(-2, "z");
+            controller.shape = new HermiteSurface([], [], [], 10);
+            controller.resetRotationDials();
             break;
         case 'sp':
-            self.shape.scale(1.1);
+            controller.shape.scale(1.1);
             break;
         case 'sm':
-            self.shape.scale(0.9);
+            controller.shape.scale(0.9);
             break;
         case 'mxp':
-            self.shape.move(2, 0, 0);
+            controller.shape.move(2, 0, 0);
             break;
         case 'myp':
-            self.shape.move(0, 2, 0);
+            controller.shape.move(0, 2, 0);
             break;
         case 'mzp':
-            self.shape.move(0, 0, 2);
+            controller.shape.move(0, 0, 2);
             break;
         case 'mxm':
-            self.shape.move(-2, 0, 0);
+            controller.shape.move(-2, 0, 0);
             break;
         case 'mym':
-            self.shape.move(0, -2, 0);
+            controller.shape.move(0, -2, 0);
             break;
         case 'mzm':
-            self.shape.move(0, 0, -2);
+            controller.shape.move(0, 0, -2);
             break;
     }
-    self.render();
+    controller.render();
+};
+Controller.prototype.rotate = function (event) {
+    var rotation = event.target.rotation;
+    var prevRotation = event.target.parentNode.getAttribute('data-prev');
+    // console.log("Rotate " + event.target.parentNode.getAttribute('data-axe') + "; " + (rotation - prevRotation));
+    controller.shape.rotate(rotation - prevRotation, event.target.parentNode.getAttribute('data-axe'));
+
+    event.target.parentNode.setAttribute('data-prev', rotation);
+    controller.render();
 };
