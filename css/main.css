@@ -76,3 +76,19 @@ main{
     padding-bottom: 5px;
     border-bottom: 1px solid black;
 }
+#surface_panel>table{
+    padding-top: 5px;
+}
+#surface_panel input[type=text]{
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 20px;
+}
+.panel-header{
+    text-align: center;
+    font-weight: bolder;
+    font-size: 1.5em;
+}
+.hidden-panel{
+    display: none;
+}
