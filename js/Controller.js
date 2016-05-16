@@ -234,6 +234,7 @@ Controller.prototype.buttonsClick = function (event) {
             controller.shape.move(0, 0, -2);
             break;
         case 'updateSurface':
+            controller.resetRotationDials();
             controller.shape = new HermiteSurface(controller.surface.Cx, controller.surface.Cy, controller.surface.Cz, 17);
             break;
     }
