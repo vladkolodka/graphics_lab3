@@ -16,13 +16,17 @@ function Controller(elementNames) {
         panel: document.getElementById('surface_panel')
     };
 
+    // remember canvas elements
     for (var i = 0; i < arguments.length; i++) this.elements.push(document.getElementById(arguments[i]));
     for (i = 0; i < this.elements.length; i++) this.viewports.push(this.elements[i].getContext("2d"));
 
+    // resize canvas elements
     this.setViewportsSize(190);
 
+    // set toolbar buttons onClick action
     document.getElementsByClassName("toolbar")[0].addEventListener("click", this.buttonsClick, false);
 
+    // set up rotation dials
     var rotationDialsNodes = [].slice.call(document.getElementsByClassName('rotations')[0].getElementsByClassName('dial'));
     this.rotationDials = [];
     var self = this;
@@ -44,10 +48,14 @@ function Controller(elementNames) {
         field.addEventListener('change', self.surfaceFieldChanged, false);
     });
 
+    // default figure on screen
     this.shape = new Cube([0, 0], [50, 50], 50);
     this.render();
 }
-
+/**
+ * Surface fields: action (changed)
+ * @param event {Event}
+ */
 Controller.prototype.surfaceFieldChanged = function (event) {
     var index = Array.prototype.indexOf.call(controller.surface.fields, event.target);
 
@@ -75,12 +83,20 @@ Controller.prototype.surfaceFieldChanged = function (event) {
     C[tempI][index - tempI * 4] = Number(event.target.value);
 };
 
+/**
+ * Fill surface panel fields with values from matrix `C`
+ * @param C {Array<Array<number>>} Matrix
+ */
 Controller.prototype.fillSurfaceFields = function (C) {
     for (var i = 0; i < this.surface.fields.length; i++) {
         var tempI = parseInt(i / 4);
         this.surface.fields[i].value = C[tempI][i - tempI * 4];
     }
 };
+/**
+ * Surface axe radios: action (changed)
+ * @param event {Event}
+ */
 Controller.prototype.surfaceRadioChanged = function (event) {
     var axeName = event.target.value;
 
@@ -105,6 +121,9 @@ Controller.prototype.setViewportsSize = function (height) {
         this.elements[i].height = height;
     }
 };
+/**
+ * Render all viewports
+ */
 Controller.prototype.render = function () {
     for (var i = 0; i < this.elements.length; i++) this.clearCanvas(this.elements[i], this.viewports[i]);
 
@@ -121,7 +140,9 @@ Controller.prototype.render = function () {
 Controller.prototype.clearCanvas = function (object, canvas) {
     canvas.clearRect(0, 0, object.width, object.height);
 };
-
+/**
+ * Sets all rotation dials to 0 degree
+ */
 Controller.prototype.resetRotationDials = function () {
     for (var i = 0; i < controller.rotationDials.length; i++) controller.rotationDials[i].angle(0);
 };
@@ -129,6 +150,8 @@ Controller.prototype.buttonsClick = function (event) {
     if (event.target.nodeName != "BUTTON") return;
 
     var action = event.target.getAttribute("data-action");
+
+    // if clicked button creates new figure
     if(action.indexOf('nf') == 0) {
         controller.surface.panel.classList.add('hidden-panel');
         controller.resetRotationDials();
@@ -145,72 +168,84 @@ Controller.prototype.buttonsClick = function (event) {
             break;
         case 'nfs':
             /*
+            Hermite surface
             [  P00,       P01,       dP00/dt,      dP01/dt     ],
             [  P10,       P11,       dP10/dt,      dP11/dt     ],
             [  dP00/ds,   dP01/ds,   d2P00/dsdt,   d2P01/dsdt  ],
             [  dP10/ds,   dP11/ds,   d2P10/dsdt,   d2P11/dsdt  ]
              */
             controller.surface.Cx = [
-                [1, 1, 1, 1],
-                [200, 200, 1, 1],
-                [50, 50, 1, 1],
-                [50, 50, 1, 1]
+                [-50, -50, 0, 0],
+                [120, 120, 0, 0],
+                [0, 0, 30, 30],
+                [0, 0, 500, 60]
             ];
             controller.surface.Cy = [
-                [1, 1, 1, 1],
-                [1, 1, 1, 1],
-                [1, 1, 50, 1],
-                [1, 1, 1, 1]
+                [100, 100, 0, 0],
+                [0, 0, 1, 1],
+                [0, 0, 0, 0],
+                [0, 0, 0, -500]
             ];
             controller.surface.Cz = [
-                [1, 200, 0, 50],
-                [1, 200, 0, 50],
-                [1, 1, 1, 1],
-                [1, 1, 1, 1]
+                [50, 0, 0, 0],
+                [50, -50, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0]
             ];
 
-            for (var i = 0; i < controller.surface.radios.length; i++) controller.surface.radios[i].checked = false;
+            for (var i = 1; i < controller.surface.radios.length; i++) controller.surface.radios[i].checked = false;
             controller.surface.radios[0].checked = true;
 
             controller.fillSurfaceFields(controller.surface.Cx);
 
-            controller.shape = new HermiteSurface(controller.surface.Cx, controller.surface.Cy, controller.surface.Cz, 10);
+            controller.shape = new HermiteSurface(controller.surface.Cx, controller.surface.Cy, controller.surface.Cz, 17);
             controller.surface.panel.classList.remove('hidden-panel');
             break;
+        // scale ++
         case 'sp':
             controller.shape.scale(1.1);
             break;
+        // scale --
         case 'sm':
             controller.shape.scale(0.9);
             break;
+        // move X+
         case 'mxp':
             controller.shape.move(2, 0, 0);
             break;
+        // move Y+
         case 'myp':
             controller.shape.move(0, 2, 0);
             break;
+        // move Z+
         case 'mzp':
             controller.shape.move(0, 0, 2);
             break;
+        // move X-
         case 'mxm':
             controller.shape.move(-2, 0, 0);
             break;
+        // move Y-
         case 'mym':
             controller.shape.move(0, -2, 0);
             break;
+        // move Z-
         case 'mzm':
             controller.shape.move(0, 0, -2);
             break;
         case 'updateSurface':
-            controller.shape = new HermiteSurface(controller.surface.Cx, controller.surface.Cy, controller.surface.Cz, 10);
+            controller.shape = new HermiteSurface(controller.surface.Cx, controller.surface.Cy, controller.surface.Cz, 17);
             break;
     }
     controller.render();
 };
+/**
+ * Dials: on action (rotation)
+ * @param event {Event}
+ */
 Controller.prototype.rotate = function (event) {
     var rotation = event.target.rotation;
     var prevRotation = event.target.parentNode.getAttribute('data-prev');
-    // console.log("Rotate " + event.target.parentNode.getAttribute('data-axe') + "; " + (rotation - prevRotation));
     controller.shape.rotate(rotation - prevRotation, event.target.parentNode.getAttribute('data-axe'));
 
     event.target.parentNode.setAttribute('data-prev', rotation);

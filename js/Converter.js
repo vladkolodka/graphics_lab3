@@ -5,10 +5,10 @@ var Converter = {
         [-0.707, -0.408, 0]
     ],
     HermiteMatrix: [
-        [2, -2, 1, -1],
+        [2, -2, 1, 1],
         [-3, 3, -2, -1],
         [0, 0, 1, 0],
-        [0, 0, 0, 0]
+        [1, 0, 0, 0]
     ],
     toTopView: function (cords) {
         var newCords = [];
@@ -89,3 +89,4 @@ var Converter = {
         return [[Math.pow(value, 3), Math.pow(value, 2), value, 1]];
     }
 };
+Converter.HermiteMatrixT = Converter.transpose(Converter.HermiteMatrix);

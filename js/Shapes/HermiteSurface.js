@@ -10,6 +10,7 @@ function HermiteSurface(Cx, Cy, Cz, stepsCount) {
     this.cords = [];
     this.connections = [];
 
+    // TODO right values for correct rotation
     this.x = 0;
     this.y = 0;
     this.z = 0;
@@ -27,8 +28,6 @@ function HermiteSurface(Cx, Cy, Cz, stepsCount) {
             var T = Converter.transpose(Converter.SingleLineMatrix(j));
 
             this.cords.push([this.getCord(Cx, S, T) , this.getCord(Cy, S, T), this.getCord(Cz, S, T)]);
-
-            // this.cords.push([j * stepsCount * 10, (j / i) * stepsCount, i * stepsCount * 10]);
         }
     }
     // create connections
@@ -42,12 +41,14 @@ function HermiteSurface(Cx, Cy, Cz, stepsCount) {
 
 HermiteSurface.prototype = Object.create(Shape.prototype);
 
+/**
+ * Get point coordinate
+ * @param Cn {Array<Array<number>>}
+ * @param S {Array<Array<number>>}
+ * @param T {Array<Array<number>>}
+ * @returns {number}
+ */
 HermiteSurface.prototype.getCord = function (Cn, S, T) {
-    /*var a = Converter.multiply(S, Converter.HermiteMatrix);
-    var b = Converter.multiply(a, Cn);
-    var c = Converter.multiply(b, Converter.transpose(Converter.HermiteMatrix));
-    var d = Converter.multiply(c, T);
-
-    return d[0][0];*/
-    return Converter.multiply(Converter.multiply(Converter.multiply(Converter.multiply(S, Converter.HermiteMatrix), Cn), Converter.transpose(Converter.HermiteMatrix)), T)[0][0];
+    // S*M*Cn*mT*tT
+    return Converter.multiply(S, Converter.multiply(Converter.HermiteMatrix, Converter.multiply(Cn, Converter.multiply(Converter.HermiteMatrixT, T))))[0][0];
 };
